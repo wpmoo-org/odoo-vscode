@@ -3,6 +3,8 @@ dist/
 out/
 *.vsix
 media/vscode-elements.js
+media/codicon.css
+media/codicon.ttf
 .DS_Store
 .env
 .env.*

@@ -44,7 +44,7 @@ button {
 
 .settings-shell {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-columns: 42px minmax(0, 1fr);
   min-height: calc(100vh - 34px);
 }
 
@@ -53,7 +53,7 @@ button {
   flex-direction: column;
   align-items: stretch;
   gap: 2px;
-  padding: 8px 4px;
+  padding: 8px 5px;
   background: var(--vscode-sideBar-background);
   border-right: 1px solid var(--vscode-sideBar-border);
   box-sizing: border-box;
@@ -63,14 +63,18 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   padding: 0;
   color: var(--vscode-icon-foreground);
   background: var(--vscode-sideBar-background);
   border: 1px solid var(--vscode-sideBar-background);
   border-radius: 4px;
   cursor: pointer;
+}
+
+.section-tab .codicon {
+  font-size: 17px;
 }
 
 .section-tab:hover {
@@ -100,14 +104,14 @@ button {
 
 .content {
   min-width: 0;
-  padding: 18px 20px 28px;
+  padding: 14px 16px 22px;
   box-sizing: border-box;
 }
 
 .main-heading {
-  margin: 0 0 18px;
+  margin: 0 0 14px;
   color: var(--vscode-foreground);
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 600;
   line-height: 1.25;
 }
@@ -134,14 +138,14 @@ button {
 .section-heading h2 {
   margin: 0;
   color: var(--vscode-foreground);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1.35;
 }
 
 .section-description {
   max-width: 720px;
-  margin: 0 0 14px;
+  margin: 0 0 12px;
   color: var(--vscode-descriptionForeground);
   line-height: 1.45;
 }
@@ -154,10 +158,10 @@ button {
 
 .settings-row {
   display: grid;
-  grid-template-columns: minmax(180px, 0.86fr) minmax(260px, 1.14fr);
-  gap: 18px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
   align-items: start;
-  padding: 13px 0;
+  padding: 11px 0;
   border-bottom: 1px solid var(--vscode-panel-border);
 }
 
@@ -205,8 +209,8 @@ button {
 
 .control-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 12px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
 }
 
 .control-field {
@@ -216,7 +220,7 @@ button {
 }
 
 .control-field.is-half {
-  grid-column: auto;
+  grid-column: 1 / -1;
 }
 
 .control-field:not(.is-half) {
@@ -258,8 +262,9 @@ button {
 
 .command-preview {
   display: block;
+  max-height: 180px;
   padding: 7px 8px;
-  overflow-x: hidden;
+  overflow: auto;
   overflow-wrap: anywhere;
   color: var(--vscode-textPreformat-foreground);
   background: var(--vscode-textCodeBlock-background);
@@ -289,21 +294,8 @@ button {
 }
 
 @media (max-width: 560px) {
-  .settings-row {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
-  }
-
   .content {
-    padding: 16px 14px 24px;
-  }
-
-  .control-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .control-field.is-half {
-    grid-column: 1 / -1;
+    padding: 12px 12px 20px;
   }
 
   .command-preview-toolbar,

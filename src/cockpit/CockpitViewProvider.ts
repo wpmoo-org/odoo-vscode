@@ -44,8 +44,12 @@ export class CockpitViewProvider implements vscode.WebviewViewProvider {
     const componentScriptUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this.extensionUri, "media", "vscode-elements.js")
     );
+    const codiconsCssUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this.extensionUri, "media", "codicon.css")
+    );
 
     return renderCockpitHtml({
+      codiconsCssUri,
       componentScriptUri,
       nonce,
       sections: cockpitSections,

@@ -6,6 +6,7 @@ import { cockpitStyles } from "./styles";
 import type { CommandPreview, ControlDefinition, SectionDefinition, SettingsRowDefinition } from "./types";
 
 export interface RenderCockpitHtmlOptions {
+  readonly codiconsCssUri: vscode.Uri;
   readonly componentScriptUri: vscode.Uri;
   readonly nonce: string;
   readonly sections: readonly SectionDefinition[];
@@ -19,9 +20,10 @@ export function renderCockpitHtml(options: RenderCockpitHtmlOptions): string {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${options.webview.cspSource}; style-src ${options.webview.cspSource} 'unsafe-inline'; script-src ${options.webview.cspSource} 'nonce-${options.nonce}';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${options.webview.cspSource}; font-src ${options.webview.cspSource}; style-src ${options.webview.cspSource} 'unsafe-inline'; script-src ${options.webview.cspSource} 'nonce-${options.nonce}';">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WPMoo: Odoo Settings</title>
+  <link rel="stylesheet" href="${options.codiconsCssUri.toString()}">
   <script type="module" nonce="${options.nonce}" src="${options.componentScriptUri.toString()}"></script>
   <style>${cockpitStyles}</style>
 </head>
@@ -50,7 +52,7 @@ function renderSectionTab(section: SectionDefinition, selected: boolean): string
   const label = escapeAttribute(section.title);
 
   return `<button class="section-tab" id="tab-${sectionId}" type="button" role="tab" data-section-id="${sectionId}" aria-controls="section-${sectionId}" aria-selected="${String(selected)}" tabindex="${selected ? "0" : "-1"}" title="${label}">
-    <vscode-icon name="${escapeAttribute(section.icon)}" aria-hidden="true"></vscode-icon>
+    ${renderCodicon(section.icon)}
     <span class="section-tab-label">${escapeHtml(section.title)}</span>
   </button>`;
 }
@@ -61,7 +63,7 @@ function renderSectionPanel(section: SectionDefinition, hidden: boolean): string
   return `<section class="section-panel" id="section-${sectionId}" role="tabpanel" data-section-id="${sectionId}" aria-labelledby="tab-${sectionId}"${hidden ? " hidden" : ""}>
     <div class="section-heading">
       <div class="section-heading-copy">
-        <vscode-icon name="${escapeAttribute(section.icon)}" aria-hidden="true"></vscode-icon>
+        ${renderCodicon(section.icon)}
         <h2>${escapeHtml(section.title)}</h2>
       </div>
       <vscode-badge>Preview shell</vscode-badge>
@@ -99,6 +101,10 @@ function renderSettingsRow(sectionId: string, row: SettingsRowDefinition): strin
       ${action}
     </div>
   </article>`;
+}
+
+function renderCodicon(icon: string): string {
+  return `<span class="codicon codicon-${escapeAttribute(icon)}" aria-hidden="true"></span>`;
 }
 
 function renderControl(control: ControlDefinition): string {
