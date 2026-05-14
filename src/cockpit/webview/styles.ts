@@ -463,14 +463,11 @@ button {
 .command-copy-button,
 .command-run-button {
   color: var(--vscode-icon-foreground);
+  flex: 0 0 auto;
 }
 
 .command-preview-card.is-disabled .command-preview {
   color: var(--vscode-disabledForeground);
-}
-
-.command-run-button {
-  flex: 0 0 auto;
 }
 
 .command-run-button[aria-disabled="true"],

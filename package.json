@@ -1,5 +1,5 @@
 {
-  "name": "wpmoo-odoo-vscode",
+  "name": "odoo-vscode",
   "displayName": "WPMoo Odoo",
   "description": "VS Code service cockpit for WPMoo Odoo environments.",
   "version": "0.0.1",
@@ -7,12 +7,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wpmoo-org/wpmoo-odoo-vscode.git"
+    "url": "https://github.com/wpmoo-org/odoo-vscode.git"
   },
   "bugs": {
-    "url": "https://github.com/wpmoo-org/wpmoo-odoo-vscode/issues"
+    "url": "https://github.com/wpmoo-org/odoo-vscode/issues"
   },
-  "homepage": "https://github.com/wpmoo-org/wpmoo-odoo-vscode#readme",
+  "homepage": "https://github.com/wpmoo-org/odoo-vscode#readme",
   "engines": {
     "vscode": "^1.100.0"
   },

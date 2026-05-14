@@ -86,10 +86,11 @@ test("renders row command previews with inline copy and action controls", () => 
 
   assert.match(html, /class="command-line"/);
   assert.match(html, /<vscode-textfield class="command-preview"[^>]*readonly/);
-  assert.match(html, /<vscode-icon class="command-copy-button"[^>]*slot="content-after"[^>]*action-icon/);
-  assert.match(html, /name="copy"/);
-  assert.match(html, /<vscode-icon class="command-run-button"[^>]*slot="content-after"[^>]*action-icon[^>]*name="debug-start"[^>]*label="Run status"/);
+  assert.match(html, /<vscode-button class="command-copy-button"[^>]*slot="content-after"[^>]*icon="copy"[^>]*aria-label="Copy command"/);
+  assert.match(html, /<vscode-button class="command-run-button"[^>]*slot="content-after"[^>]*icon="debug-start"[^>]*aria-label="Run status"/);
   assert.match(html, /class="command-run-button"[^>]*aria-disabled="true"/);
   assert.doesNotMatch(html, />Run status<\/vscode-button>/);
+  assert.doesNotMatch(html, /<vscode-icon class="command-copy-button"/);
+  assert.doesNotMatch(html, /<vscode-icon class="command-run-button"/);
   assert.doesNotMatch(html, /<button class="command-copy-button"/);
 });
