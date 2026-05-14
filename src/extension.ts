@@ -1,41 +1,42 @@
 import * as vscode from "vscode";
 
 import { CockpitViewProvider } from "./cockpit/CockpitViewProvider";
+import { runCockpitTerminalCommand } from "./cockpit/terminalRunner.js";
 
 interface CockpitCommand {
   readonly command: string;
-  readonly title: string;
+  readonly commandId: string;
 }
 
 const cockpitCommands: readonly CockpitCommand[] = [
   {
     command: "wpmooOdoo.status",
-    title: "Status"
+    commandId: "status"
   },
   {
     command: "wpmooOdoo.doctor",
-    title: "Doctor"
+    commandId: "doctor"
   },
   {
     command: "wpmooOdoo.start",
-    title: "Start"
+    commandId: "start"
   },
   {
     command: "wpmooOdoo.stop",
-    title: "Stop"
+    commandId: "stop"
   },
   {
     command: "wpmooOdoo.restart",
-    title: "Restart"
+    commandId: "restart"
   },
   {
     command: "wpmooOdoo.logs",
-    title: "Logs"
+    commandId: "logs"
   }
 ];
 
 export function activate(context: vscode.ExtensionContext): void {
-  const provider = new CockpitViewProvider(context.extensionUri);
+  const provider = new CockpitViewProvider(context.extensionUri, runCockpitTerminalCommand);
 
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(CockpitViewProvider.viewType, provider),
@@ -48,9 +49,7 @@ export function activate(context: vscode.ExtensionContext): void {
   for (const cockpitCommand of cockpitCommands) {
     context.subscriptions.push(
       vscode.commands.registerCommand(cockpitCommand.command, async () => {
-        await vscode.window.showInformationMessage(
-          `${cockpitCommand.title} is registered. Command execution will be implemented in the service cockpit MVP.`
-        );
+        await runCockpitTerminalCommand(cockpitCommand.commandId);
       })
     );
   }

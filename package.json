@@ -26,7 +26,13 @@
     "service cockpit"
   ],
   "activationEvents": [
-    "onView:wpmooOdoo.cockpit"
+    "onView:wpmooOdoo.cockpit",
+    "onCommand:wpmooOdoo.status",
+    "onCommand:wpmooOdoo.doctor",
+    "onCommand:wpmooOdoo.start",
+    "onCommand:wpmooOdoo.stop",
+    "onCommand:wpmooOdoo.restart",
+    "onCommand:wpmooOdoo.logs"
   ],
   "main": "./dist/extension.js",
   "contributes": {

@@ -1,21 +1,38 @@
 import * as vscode from "vscode";
 
+import { runCockpitTerminalCommand } from "./terminalRunner.js";
 import { renderCockpitHtml } from "./webview/renderHtml";
 import { cockpitSections } from "./webview/sections/index.js";
+
+interface RunCommandMessage {
+  readonly type: "runCommand";
+  readonly commandId: string;
+}
 
 export class CockpitViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "wpmooOdoo.cockpit";
 
   private view?: vscode.WebviewView;
+  private messageSubscription?: vscode.Disposable;
 
-  public constructor(private readonly extensionUri: vscode.Uri) {}
+  public constructor(
+    private readonly extensionUri: vscode.Uri,
+    private readonly runCommand: (commandId: string) => Promise<void> = runCockpitTerminalCommand
+  ) {}
 
   public resolveWebviewView(webviewView: vscode.WebviewView): void {
     this.view = webviewView;
+    this.messageSubscription?.dispose();
     webviewView.webview.options = {
       enableScripts: true,
       localResourceRoots: [vscode.Uri.joinPath(this.extensionUri, "media")]
     };
+
+    this.messageSubscription = webviewView.webview.onDidReceiveMessage((message: unknown) => {
+      if (isRunCommandMessage(message)) {
+        void this.runCommand(message.commandId);
+      }
+    });
 
     webviewView.webview.html = this.render(webviewView.webview);
   }
@@ -56,4 +73,15 @@ function getNonce(): string {
   }
 
   return text;
+}
+
+function isRunCommandMessage(message: unknown): message is RunCommandMessage {
+  return (
+    typeof message === "object" &&
+    message !== null &&
+    "type" in message &&
+    "commandId" in message &&
+    message.type === "runCommand" &&
+    typeof message.commandId === "string"
+  );
 }

@@ -121,7 +121,7 @@ function renderCockpitDashboard(dashboard: CockpitDashboardDefinition): string {
 }
 
 function renderDashboardAction(action: CockpitDashboardAction): string {
-  return `<vscode-button class="compact-action${action.primary ? " is-primary" : ""}"${action.primary ? "" : " secondary"} title="${escapeAttribute(buildCommandPreview(action.commandPreview.argv))}">${escapeHtml(action.label)}</vscode-button>`;
+  return `<vscode-button class="compact-action${action.primary ? " is-primary" : ""}"${action.primary ? "" : " secondary"} data-run-command="${escapeAttribute(action.id)}" title="${escapeAttribute(buildCommandPreview(action.commandPreview.argv))}">${escapeHtml(action.label)}</vscode-button>`;
 }
 
 function renderDashboardService(service: CockpitDashboardService): string {

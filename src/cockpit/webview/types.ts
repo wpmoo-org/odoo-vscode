@@ -103,4 +103,8 @@ export type WebviewMessage =
   | {
       readonly type: "sectionSelected";
       readonly sectionId: string;
+    }
+  | {
+      readonly type: "runCommand";
+      readonly commandId: string;
     };

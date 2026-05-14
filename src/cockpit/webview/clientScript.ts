@@ -1,4 +1,16 @@
 export const cockpitClientScript = `
+const vscodeApi = (() => {
+  if (typeof acquireVsCodeApi !== "function") {
+    return undefined;
+  }
+
+  try {
+    return acquireVsCodeApi();
+  } catch {
+    return undefined;
+  }
+})();
+
 const tabs = Array.from(document.querySelectorAll('[role="tab"][data-section-id]'));
 const panels = Array.from(document.querySelectorAll('[role="tabpanel"][data-section-id]'));
 const mainHeading = document.querySelector(".main-heading");
@@ -170,6 +182,18 @@ for (const copyButton of document.querySelectorAll("[data-copy-command], [data-c
     window.setTimeout(() => {
       copyButton.textContent = previousText || "Copy command";
     }, 1200);
+  });
+}
+
+for (const runButton of document.querySelectorAll("[data-run-command]")) {
+  runButton.addEventListener("click", () => {
+    const commandId = runButton.dataset.runCommand;
+
+    if (!commandId) {
+      return;
+    }
+
+    vscodeApi?.postMessage({ type: "runCommand", commandId });
   });
 }
 `;

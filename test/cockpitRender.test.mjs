@@ -34,6 +34,8 @@ test("renders Cockpit as the default compact dashboard", () => {
   assert.match(html, /class="compact-action[^"]*"[^>]*>Restart<\/vscode-button>/);
   assert.match(html, /class="compact-action[^"]*"[^>]*>Logs<\/vscode-button>/);
   assert.match(html, /class="compact-action[^"]*"[^>]*>Doctor<\/vscode-button>/);
+  assert.match(html, /data-run-command="start"/);
+  assert.match(html, /data-run-command="logs"/);
   assert.match(html, /Odoo Web/);
   assert.match(html, /Recent logs/);
 });
