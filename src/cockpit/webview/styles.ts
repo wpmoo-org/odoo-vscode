@@ -460,10 +460,25 @@ button {
   font-size: var(--vscode-editor-font-size);
 }
 
-.command-copy-button,
-.command-run-button {
+.command-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
   color: var(--vscode-icon-foreground);
-  flex: 0 0 auto;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.command-icon-button:hover {
+  background: var(--vscode-toolbar-hoverBackground);
+}
+
+.command-icon-button:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
 }
 
 .command-preview-card.is-disabled .command-preview {
@@ -474,6 +489,7 @@ button {
 .command-preview-card.is-disabled .command-run-button {
   opacity: 0.5;
   pointer-events: none;
+  cursor: default;
 }
 
 .preview-description {

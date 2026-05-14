@@ -261,7 +261,7 @@ function renderCommandPreview(
     <div class="command-line">
       <div class="command-field">
         <vscode-textfield class="command-preview" value="${escapeAttribute(command)}" readonly${idAttribute} data-command-value="${escapeAttribute(command)}">
-          <vscode-button class="command-copy-button" slot="content-after" icon="copy" aria-label="Copy command" title="Copy command"${copyAttribute}></vscode-button>
+          <span class="codicon codicon-copy command-icon-button command-copy-button" slot="content-after" role="button" tabindex="0" aria-label="Copy command" title="Copy command"${copyAttribute}></span>
           ${action ? renderInlineRowAction(action) : ""}
         </vscode-textfield>
       </div>
@@ -271,10 +271,10 @@ function renderCommandPreview(
 }
 
 function renderInlineRowAction(action: NonNullable<SettingsRowDefinition["action"]>): string {
-  const disabledAttribute = action.disabled ? ` disabled aria-disabled="true"` : "";
+  const disabledAttribute = action.disabled ? ` aria-disabled="true"` : ` tabindex="0"`;
   const label = escapeAttribute(action.label);
 
-  return `<vscode-button class="command-run-button" slot="content-after" icon="debug-start" aria-label="${label}" title="${label}"${disabledAttribute}></vscode-button>`;
+  return `<span class="codicon codicon-debug-start command-icon-button command-run-button" slot="content-after" role="button" aria-label="${label}" title="${label}"${disabledAttribute}></span>`;
 }
 
 function renderRowAction(action: NonNullable<SettingsRowDefinition["action"]>): string {

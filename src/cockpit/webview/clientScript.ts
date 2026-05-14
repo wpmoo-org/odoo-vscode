@@ -173,6 +173,17 @@ function syncEnvironmentCreatePreview() {
   setCommandPreview("environment-create", buildEnvironmentCreateCommand());
 }
 
+function triggerClickFromKeyboard(element) {
+  element.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    event.preventDefault();
+    element.click();
+  });
+}
+
 for (const field of document.querySelectorAll("[data-command-field]")) {
   field.addEventListener("input", syncEnvironmentCreatePreview);
   field.addEventListener("change", syncEnvironmentCreatePreview);
@@ -181,6 +192,8 @@ for (const field of document.querySelectorAll("[data-command-field]")) {
 syncEnvironmentCreatePreview();
 
 for (const copyButton of document.querySelectorAll("[data-copy-command], [data-copy-inline]")) {
+  triggerClickFromKeyboard(copyButton);
+
   copyButton.addEventListener("click", async () => {
     const commandId = copyButton.dataset.copyCommand;
     const output = commandId ? document.querySelector('[data-command-output="' + commandId + '"]') : undefined;
@@ -224,6 +237,8 @@ for (const copyButton of document.querySelectorAll("[data-copy-command], [data-c
 }
 
 for (const runButton of document.querySelectorAll("[data-run-command]")) {
+  triggerClickFromKeyboard(runButton);
+
   runButton.addEventListener("click", () => {
     const commandId = runButton.dataset.runCommand;
 
