@@ -84,6 +84,16 @@ if (tabs.length > 0) {
   selectSection(selectedTab.dataset.sectionId);
 }
 
+for (const sectionTarget of document.querySelectorAll("[data-section-target]")) {
+  sectionTarget.addEventListener("click", () => {
+    const sectionId = sectionTarget.dataset.sectionTarget;
+
+    if (sectionId) {
+      selectSection(sectionId, { focus: true });
+    }
+  });
+}
+
 const safeShellArgPattern = /^[A-Za-z0-9_./:@%+=,-]+$/;
 
 function quoteCommandArg(arg) {

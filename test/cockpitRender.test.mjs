@@ -21,6 +21,12 @@ test("renders Cockpit as the default compact dashboard", () => {
   const html = renderCockpitHtml({
     codiconsCssUri: fakeUri,
     componentScriptUri: fakeUri,
+    environmentGate: {
+      ready: true,
+      statusLabel: "Status: Running",
+      message: "A WPMoo environment is active in this workspace.",
+      setupSectionId: "environment-setup"
+    },
     nonce: "test-nonce",
     sections: cockpitSections,
     webview: fakeWebview
@@ -38,4 +44,27 @@ test("renders Cockpit as the default compact dashboard", () => {
   assert.match(html, /data-run-command="logs"/);
   assert.match(html, /Odoo Web/);
   assert.match(html, /Recent logs/);
+});
+
+test("renders disabled Cockpit actions when no environment is active", () => {
+  const html = renderCockpitHtml({
+    codiconsCssUri: fakeUri,
+    componentScriptUri: fakeUri,
+    environmentGate: {
+      ready: false,
+      statusLabel: "Status: Unavailable",
+      message: "No WPMoo environment is detected in this workspace.",
+      setupSectionId: "environment-setup"
+    },
+    nonce: "test-nonce",
+    sections: cockpitSections,
+    webview: fakeWebview
+  });
+
+  assert.match(html, /No active environment/);
+  assert.match(html, /No WPMoo environment is detected in this workspace/);
+  assert.match(html, /data-section-target="environment-setup"/);
+  assert.match(html, /Status: Unavailable/);
+  assert.match(html, /class="compact-action[^"]*"[^>]*disabled[^>]*>Start<\/vscode-button>/);
+  assert.doesNotMatch(html, /data-run-command="start"/);
 });

@@ -14,11 +14,18 @@ test("detects a strong workspace when compose and package markers are present", 
   );
 });
 
+test("detects generated WPMoo metadata as a strong workspace marker", () => {
+  assert.deepEqual(detectWorkspaceSignals([".wpmoo/odoo.json"]), {
+    detected: true,
+    confidence: "strong",
+    markers: [".wpmoo/odoo.json"]
+  });
+});
+
 test("detects partial workspaces from a single known marker", () => {
   const cases = [
     ["docker-compose.yml", "docker-compose.yml"],
     ["compose.yml", "compose.yml"],
-    [".wpmoo/odoo.json", ".wpmoo/odoo.json"],
     ["package.json", "package.json"]
   ];
 

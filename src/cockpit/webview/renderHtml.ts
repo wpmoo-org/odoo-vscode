@@ -9,6 +9,7 @@ import type {
   CockpitDashboardService,
   CommandPreview,
   ControlDefinition,
+  EnvironmentGate,
   SectionDefinition,
   SettingsRowDefinition
 } from "./types";
@@ -16,14 +17,23 @@ import type {
 export interface RenderCockpitHtmlOptions {
   readonly codiconsCssUri: vscode.Uri;
   readonly componentScriptUri: vscode.Uri;
+  readonly environmentGate?: EnvironmentGate;
   readonly nonce: string;
   readonly sections: readonly SectionDefinition[];
   readonly webview: vscode.Webview;
 }
 
+const defaultEnvironmentGate: EnvironmentGate = {
+  ready: true,
+  statusLabel: "Status: Running",
+  message: "A WPMoo environment is active in this workspace.",
+  setupSectionId: "environment-setup"
+};
+
 export function renderCockpitHtml(options: RenderCockpitHtmlOptions): string {
   const firstSection = options.sections[0];
   const firstSectionId = firstSection?.id;
+  const environmentGate = options.environmentGate ?? defaultEnvironmentGate;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -47,7 +57,7 @@ export function renderCockpitHtml(options: RenderCockpitHtmlOptions): string {
       </nav>
       <main class="content">
         <h1 class="main-heading">${firstSection ? escapeHtml(firstSection.title) : "Settings"}</h1>
-        ${options.sections.map((section) => renderSectionPanel(section, section.id !== firstSectionId)).join("")}
+        ${options.sections.map((section) => renderSectionPanel(section, section.id !== firstSectionId, environmentGate)).join("")}
       </main>
     </div>
   </div>
@@ -66,7 +76,7 @@ function renderSectionTab(section: SectionDefinition, selected: boolean): string
   </button>`;
 }
 
-function renderSectionPanel(section: SectionDefinition, hidden: boolean): string {
+function renderSectionPanel(section: SectionDefinition, hidden: boolean, environmentGate: EnvironmentGate): string {
   const sectionId = escapeAttribute(section.id);
   const rows = section.rows.length
     ? `<div class="settings-rows">${section.rows.map((row) => renderSettingsRow(sectionId, row)).join("")}</div>`
@@ -81,19 +91,25 @@ function renderSectionPanel(section: SectionDefinition, hidden: boolean): string
       <vscode-badge>Preview shell</vscode-badge>
     </div>
     ${section.description ? `<p class="section-description">${escapeHtml(section.description)}</p>` : ""}
-    ${section.dashboard ? renderCockpitDashboard(section.dashboard) : ""}
+    ${section.dashboard ? renderCockpitDashboard(section.dashboard, environmentGate) : ""}
     ${rows}
   </section>`;
 }
 
-function renderCockpitDashboard(dashboard: CockpitDashboardDefinition): string {
+function renderCockpitDashboard(dashboard: CockpitDashboardDefinition, environmentGate: EnvironmentGate): string {
+  const services = environmentGate.ready ? dashboard.services : getUnavailableServices(dashboard.services);
+  const recentLogs = environmentGate.ready
+    ? dashboard.recentLogs
+    : ["No active environment is available. Create or select an environment before streaming logs."];
+
   return `<div class="cockpit-dashboard">
+    ${environmentGate.ready ? "" : renderEnvironmentGate(environmentGate)}
     <section class="cockpit-control-bar" aria-label="Service controls">
       <div class="cockpit-status">
-        <span class="status-pill is-${escapeAttribute(dashboard.status.tone)}">${escapeHtml(dashboard.status.label)}</span>
+        <span class="status-pill is-${escapeAttribute(environmentGate.ready ? dashboard.status.tone : "warning")}">${escapeHtml(environmentGate.ready ? dashboard.status.label : environmentGate.statusLabel)}</span>
       </div>
       <vscode-button-group class="cockpit-actions" aria-label="Service command previews">
-        ${dashboard.actions.map(renderDashboardAction).join("")}
+        ${dashboard.actions.map((action) => renderDashboardAction(action, environmentGate.ready)).join("")}
       </vscode-button-group>
     </section>
     <section class="dashboard-block" aria-label="Services">
@@ -101,7 +117,7 @@ function renderCockpitDashboard(dashboard: CockpitDashboardDefinition): string {
         <h3>Services</h3>
       </div>
       <div class="service-list">
-        ${dashboard.services.map(renderDashboardService).join("")}
+        ${services.map(renderDashboardService).join("")}
       </div>
     </section>
     <section class="dashboard-block" aria-label="Last command">
@@ -115,13 +131,26 @@ function renderCockpitDashboard(dashboard: CockpitDashboardDefinition): string {
       <div class="dashboard-block-heading">
         <h3>Recent logs</h3>
       </div>
-      <pre class="log-preview">${dashboard.recentLogs.map(escapeHtml).join("\n")}</pre>
+      <pre class="log-preview">${recentLogs.map(escapeHtml).join("\n")}</pre>
     </section>
   </div>`;
 }
 
-function renderDashboardAction(action: CockpitDashboardAction): string {
-  return `<vscode-button class="compact-action${action.primary ? " is-primary" : ""}"${action.primary ? "" : " secondary"} data-run-command="${escapeAttribute(action.id)}" title="${escapeAttribute(buildCommandPreview(action.commandPreview.argv))}">${escapeHtml(action.label)}</vscode-button>`;
+function renderEnvironmentGate(environmentGate: EnvironmentGate): string {
+  return `<section class="environment-gate" aria-label="Environment required">
+    <div class="environment-gate-copy">
+      <p class="environment-gate-title">No active environment</p>
+      <p class="environment-gate-description">${escapeHtml(environmentGate.message)}</p>
+    </div>
+    <vscode-button data-section-target="${escapeAttribute(environmentGate.setupSectionId)}">Open setup section</vscode-button>
+  </section>`;
+}
+
+function renderDashboardAction(action: CockpitDashboardAction, enabled: boolean): string {
+  const runAttribute = enabled ? ` data-run-command="${escapeAttribute(action.id)}"` : "";
+  const disabledAttribute = enabled ? "" : " disabled";
+
+  return `<vscode-button class="compact-action${action.primary ? " is-primary" : ""}"${action.primary ? "" : " secondary"}${disabledAttribute}${runAttribute} title="${escapeAttribute(buildCommandPreview(action.commandPreview.argv))}">${escapeHtml(action.label)}</vscode-button>`;
 }
 
 function renderDashboardService(service: CockpitDashboardService): string {
@@ -132,6 +161,15 @@ function renderDashboardService(service: CockpitDashboardService): string {
     </div>
     <span class="service-detail">${escapeHtml(service.detail)}</span>
   </div>`;
+}
+
+function getUnavailableServices(services: readonly CockpitDashboardService[]): CockpitDashboardService[] {
+  return services.map((service) => ({
+    ...service,
+    status: "Unavailable",
+    detail: "environment required",
+    tone: "unknown"
+  }));
 }
 
 function renderSettingsRow(sectionId: string, row: SettingsRowDefinition): string {

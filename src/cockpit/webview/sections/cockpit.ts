@@ -5,7 +5,7 @@ export const cockpitSection: SectionDefinition = {
   title: "Cockpit",
   icon: "play-circle",
   heading: "WPMoo: Odoo Cockpit",
-  description: "Daily service controls for the active WPMoo Odoo environment. Execution wiring comes in the next phase.",
+  description: "Daily service controls for the active WPMoo Odoo environment. Commands run in the VS Code terminal when an environment is detected.",
   dashboard: {
     status: {
       label: "Status: Running",
@@ -87,7 +87,7 @@ export const cockpitSection: SectionDefinition = {
     {
       id: "preview-note",
       title: "Preview shell",
-      description: "These controls show the intended daily workflow. Real terminal execution, status detection, and log streaming will be wired separately.",
+      description: "These controls show the intended daily workflow. Environment-aware terminal execution is active; live status and log streaming will be wired separately.",
       commandPreview: {
         argv: ["npx", "@wpmoo/odoo", "status"]
       },

@@ -5,6 +5,13 @@ export interface CommandPreview {
   readonly dynamic?: "environmentCreate";
 }
 
+export interface EnvironmentGate {
+  readonly ready: boolean;
+  readonly statusLabel: string;
+  readonly message: string;
+  readonly setupSectionId: string;
+}
+
 export interface CockpitDashboardAction {
   readonly id: string;
   readonly label: string;

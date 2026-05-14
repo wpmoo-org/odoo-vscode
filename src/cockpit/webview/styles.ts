@@ -163,6 +163,37 @@ button {
   margin-bottom: 12px;
 }
 
+.environment-gate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  background: var(--vscode-inputValidation-warningBackground);
+  border: 1px solid var(--vscode-inputValidation-warningBorder);
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.environment-gate-copy {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.environment-gate-title {
+  margin: 0;
+  color: var(--vscode-foreground);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.environment-gate-description {
+  margin: 0;
+  color: var(--vscode-descriptionForeground);
+  line-height: 1.45;
+}
+
 .cockpit-control-bar {
   display: flex;
   flex-wrap: wrap;
@@ -188,6 +219,10 @@ button {
 
 .compact-action {
   min-width: 0;
+}
+
+.compact-action[disabled] {
+  cursor: not-allowed;
 }
 
 .dashboard-block {
@@ -450,6 +485,7 @@ button {
 
   .cockpit-control-bar,
   .dashboard-block-heading,
+  .environment-gate,
   .service-row {
     align-items: stretch;
     flex-direction: column;

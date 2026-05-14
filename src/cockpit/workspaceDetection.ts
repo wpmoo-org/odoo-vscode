@@ -6,7 +6,7 @@ export interface WorkspaceDetectionResult {
   readonly markers: string[];
 }
 
-const workspaceMarkers = [
+export const workspaceMarkers = [
   "docker-compose.yml",
   "compose.yml",
   ".wpmoo/odoo.json",
@@ -17,9 +17,11 @@ export function detectWorkspaceSignals(fileNames: readonly string[]): WorkspaceD
   const fileNameSet = new Set(fileNames);
   const markers = workspaceMarkers.filter((marker) => fileNameSet.has(marker));
   const hasDockerCompose = fileNameSet.has("docker-compose.yml");
+  const hasCompose = fileNameSet.has("compose.yml");
+  const hasGeneratedMetadata = fileNameSet.has(".wpmoo/odoo.json");
   const hasPackageJson = fileNameSet.has("package.json");
 
-  if (hasDockerCompose && hasPackageJson) {
+  if (hasGeneratedMetadata || ((hasDockerCompose || hasCompose) && hasPackageJson)) {
     return {
       detected: true,
       confidence: "strong",
