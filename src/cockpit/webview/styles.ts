@@ -460,7 +460,8 @@ button {
   font-size: var(--vscode-editor-font-size);
 }
 
-.command-copy-button {
+.command-copy-button,
+.command-run-button {
   color: var(--vscode-icon-foreground);
 }
 
@@ -468,14 +469,14 @@ button {
   color: var(--vscode-disabledForeground);
 }
 
-.command-preview-card.is-disabled .command-copy-button,
-.command-preview-card.is-disabled .command-run-button {
-  opacity: 0.62;
-}
-
 .command-run-button {
   flex: 0 0 auto;
-  min-width: 88px;
+}
+
+.command-run-button[aria-disabled="true"],
+.command-preview-card.is-disabled .command-run-button {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .preview-description {
@@ -516,10 +517,6 @@ button {
   .row-actions {
     align-items: stretch;
     flex-direction: column;
-  }
-
-  .command-run-button {
-    width: 100%;
   }
 }
 `;

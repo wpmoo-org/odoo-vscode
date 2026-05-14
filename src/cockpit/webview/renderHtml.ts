@@ -262,16 +262,19 @@ function renderCommandPreview(
       <div class="command-field">
         <vscode-textfield class="command-preview" value="${escapeAttribute(command)}" readonly${idAttribute} data-command-value="${escapeAttribute(command)}">
           <vscode-icon class="command-copy-button" slot="content-after" action-icon name="copy" label="Copy command"${copyAttribute}></vscode-icon>
+          ${action ? renderInlineRowAction(action) : ""}
         </vscode-textfield>
       </div>
-      ${action ? renderInlineRowAction(action) : ""}
     </div>
     ${preview.description ? `<p class="preview-description">${escapeHtml(preview.description)}</p>` : ""}
   </div>`;
 }
 
 function renderInlineRowAction(action: NonNullable<SettingsRowDefinition["action"]>): string {
-  return `<vscode-button class="command-run-button"${action.disabled ? " disabled" : ""}>${escapeHtml(action.label)}</vscode-button>`;
+  const disabledAttribute = action.disabled ? ` aria-disabled="true"` : "";
+  const label = escapeAttribute(action.label);
+
+  return `<vscode-icon class="command-run-button" slot="content-after" action-icon name="debug-start" label="${label}" title="${label}"${disabledAttribute}></vscode-icon>`;
 }
 
 function renderRowAction(action: NonNullable<SettingsRowDefinition["action"]>): string {
