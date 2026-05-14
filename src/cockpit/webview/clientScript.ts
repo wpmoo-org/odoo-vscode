@@ -188,9 +188,27 @@ for (const copyButton of document.querySelectorAll("[data-copy-command], [data-c
 
     await navigator.clipboard.writeText(command);
     const previousText = copyButton.textContent;
-    copyButton.textContent = "Copied";
+    const previousLabel = copyButton.getAttribute("aria-label");
+    const previousTitle = copyButton.getAttribute("title");
+    copyButton.setAttribute("aria-label", "Copied");
+    copyButton.setAttribute("title", "Copied");
+
+    if (previousText.trim()) {
+      copyButton.textContent = "Copied";
+    }
+
     window.setTimeout(() => {
-      copyButton.textContent = previousText || "Copy command";
+      if (previousText.trim()) {
+        copyButton.textContent = previousText;
+      }
+
+      if (previousLabel) {
+        copyButton.setAttribute("aria-label", previousLabel);
+      }
+
+      if (previousTitle) {
+        copyButton.setAttribute("title", previousTitle);
+      }
     }, 1200);
   });
 }

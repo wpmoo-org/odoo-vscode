@@ -123,9 +123,8 @@ function renderCockpitDashboard(dashboard: CockpitDashboardDefinition, environme
     <section class="dashboard-block" aria-label="Last command">
       <div class="dashboard-block-heading">
         <h3>Last command</h3>
-        <vscode-button secondary data-copy-inline="${escapeAttribute(buildCommandPreview(dashboard.lastCommand.argv))}">Copy command</vscode-button>
       </div>
-      <code class="command-preview is-compact">${escapeHtml(buildCommandPreview(dashboard.lastCommand.argv))}</code>
+      ${renderCommandPreview(dashboard.lastCommand, false)}
     </section>
     <section class="dashboard-block" aria-label="Recent logs">
       <div class="dashboard-block-heading">
@@ -181,8 +180,8 @@ function renderSettingsRow(sectionId: string, row: SettingsRowDefinition): strin
   ].filter(Boolean).join(" ");
   const rowDescription = row.description ? `<p class="row-description">${escapeHtml(row.description)}</p>` : "";
   const controls = row.controls?.length ? `<div class="control-grid">${row.controls.map(renderControl).join("")}</div>` : "";
-  const preview = row.commandPreview ? renderCommandPreview(row.commandPreview, Boolean(row.previewDisabled)) : "";
-  const action = row.action ? renderRowAction(row.action) : "";
+  const preview = row.commandPreview ? renderCommandPreview(row.commandPreview, Boolean(row.previewDisabled), row.action) : "";
+  const action = row.commandPreview ? "" : row.action ? renderRowAction(row.action) : "";
 
   return `<article class="${rowClasses}" id="${rowId}">
     <div class="row-copy">
@@ -244,7 +243,11 @@ function renderCommandFieldAttribute(commandField: string | undefined): string {
   return commandField ? ` data-command-field="${escapeAttribute(commandField)}"` : "";
 }
 
-function renderCommandPreview(preview: CommandPreview, disabled: boolean): string {
+function renderCommandPreview(
+  preview: CommandPreview,
+  disabled: boolean,
+  action?: SettingsRowDefinition["action"]
+): string {
   const command = buildCommandPreview(preview.argv);
   const previewId = preview.id ? escapeAttribute(preview.id) : "";
   const dynamicAttribute = preview.dynamic ? ` data-command-dynamic="${escapeAttribute(preview.dynamic)}"` : "";
@@ -254,13 +257,22 @@ function renderCommandPreview(preview: CommandPreview, disabled: boolean): strin
     : ` data-copy-inline="${escapeAttribute(command)}"`;
 
   return `<div class="command-preview-card${disabled ? " is-disabled" : ""}"${dynamicAttribute}>
-    <div class="command-preview-toolbar">
-      <span>Command preview</span>
-      <vscode-button secondary${copyAttribute}>Copy command</vscode-button>
+    <div class="command-preview-label">Command preview</div>
+    <div class="command-line">
+      <div class="command-field">
+        <code class="command-preview"${idAttribute} data-command-value="${escapeAttribute(command)}">${escapeHtml(command)}</code>
+        <button class="command-copy-button" type="button" aria-label="Copy command" title="Copy command"${copyAttribute}>
+          ${renderCodicon("copy")}
+        </button>
+      </div>
+      ${action ? renderInlineRowAction(action) : ""}
     </div>
-    <code class="command-preview"${idAttribute} data-command-value="${escapeAttribute(command)}">${escapeHtml(command)}</code>
     ${preview.description ? `<p class="preview-description">${escapeHtml(preview.description)}</p>` : ""}
   </div>`;
+}
+
+function renderInlineRowAction(action: NonNullable<SettingsRowDefinition["action"]>): string {
+  return `<vscode-button class="command-run-button"${action.disabled ? " disabled" : ""}>${escapeHtml(action.label)}</vscode-button>`;
 }
 
 function renderRowAction(action: NonNullable<SettingsRowDefinition["action"]>): string {

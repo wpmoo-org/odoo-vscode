@@ -425,7 +425,7 @@ button {
 
 .command-preview-card {
   display: grid;
-  gap: 6px;
+  gap: 5px;
   margin-top: 10px;
 }
 
@@ -434,21 +434,31 @@ button {
   margin-top: 0;
 }
 
-.command-preview-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+.command-preview-label {
   color: var(--vscode-descriptionForeground);
   font-size: 11px;
   line-height: 1.4;
   text-transform: uppercase;
 }
 
+.command-line {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+}
+
+.command-field {
+  position: relative;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
 .command-preview {
   display: block;
   max-height: 180px;
-  padding: 7px 8px;
+  min-height: 32px;
+  padding: 7px 42px 7px 8px;
   overflow: auto;
   overflow-wrap: anywhere;
   color: var(--vscode-textPreformat-foreground);
@@ -462,8 +472,50 @@ button {
   white-space: pre-wrap;
 }
 
+.command-copy-button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  color: var(--vscode-icon-foreground);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.command-copy-button:hover {
+  background: var(--vscode-toolbar-hoverBackground);
+  border-color: var(--vscode-commandCenter-inactiveBorder);
+}
+
+.command-copy-button:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
+}
+
+.command-copy-button .codicon {
+  font-size: 15px;
+}
+
 .command-preview-card.is-disabled .command-preview {
   color: var(--vscode-disabledForeground);
+}
+
+.command-preview-card.is-disabled .command-copy-button,
+.command-preview-card.is-disabled .command-run-button {
+  opacity: 0.62;
+}
+
+.command-run-button {
+  flex: 0 0 auto;
+  min-width: 88px;
 }
 
 .preview-description {
@@ -500,10 +552,14 @@ button {
     justify-content: space-between;
   }
 
-  .command-preview-toolbar,
+  .command-line,
   .row-actions {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .command-run-button {
+    width: 100%;
   }
 }
 `;

@@ -68,3 +68,25 @@ test("renders disabled Cockpit actions when no environment is active", () => {
   assert.match(html, /class="compact-action[^"]*"[^>]*disabled[^>]*>Start<\/vscode-button>/);
   assert.doesNotMatch(html, /data-run-command="start"/);
 });
+
+test("renders row command previews with inline copy and action controls", () => {
+  const html = renderCockpitHtml({
+    codiconsCssUri: fakeUri,
+    componentScriptUri: fakeUri,
+    environmentGate: {
+      ready: true,
+      statusLabel: "Status: Running",
+      message: "A WPMoo environment is active in this workspace.",
+      setupSectionId: "environment-setup"
+    },
+    nonce: "test-nonce",
+    sections: cockpitSections,
+    webview: fakeWebview
+  });
+
+  assert.match(html, /class="command-line"/);
+  assert.match(html, /class="command-copy-button"[^>]*aria-label="Copy command"/);
+  assert.match(html, /class="codicon codicon-copy"/);
+  assert.match(html, /class="command-run-button"[^>]*disabled[^>]*>Run status<\/vscode-button>/);
+  assert.doesNotMatch(html, /<vscode-button secondary[^>]*>Copy command<\/vscode-button>/);
+});
