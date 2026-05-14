@@ -1,0 +1,117 @@
+{
+  "name": "wpmoo-odoo-vscode",
+  "displayName": "WPMoo Odoo",
+  "description": "VS Code service cockpit for WPMoo Odoo environments.",
+  "version": "0.0.1",
+  "publisher": "wpmoo-org",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wpmoo-org/wpmoo-odoo-vscode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wpmoo-org/wpmoo-odoo-vscode/issues"
+  },
+  "homepage": "https://github.com/wpmoo-org/wpmoo-odoo-vscode#readme",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "odoo",
+    "wpmoo",
+    "docker",
+    "service cockpit"
+  ],
+  "activationEvents": [
+    "onView:wpmooOdoo.cockpit"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "wpmooOdoo",
+          "title": "WPMoo Odoo",
+          "icon": "resources/wpmoo.svg"
+        }
+      ]
+    },
+    "views": {
+      "wpmooOdoo": [
+        {
+          "id": "wpmooOdoo.cockpit",
+          "name": "Cockpit",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "wpmooOdoo.openCockpit",
+        "title": "Open Cockpit",
+        "category": "WPMoo Odoo"
+      },
+      {
+        "command": "wpmooOdoo.refresh",
+        "title": "Refresh Cockpit",
+        "category": "WPMoo Odoo",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "wpmooOdoo.status",
+        "title": "Status",
+        "category": "WPMoo Odoo"
+      },
+      {
+        "command": "wpmooOdoo.doctor",
+        "title": "Doctor",
+        "category": "WPMoo Odoo"
+      },
+      {
+        "command": "wpmooOdoo.start",
+        "title": "Start Services",
+        "category": "WPMoo Odoo"
+      },
+      {
+        "command": "wpmooOdoo.stop",
+        "title": "Stop Services",
+        "category": "WPMoo Odoo"
+      },
+      {
+        "command": "wpmooOdoo.restart",
+        "title": "Restart Services",
+        "category": "WPMoo Odoo"
+      },
+      {
+        "command": "wpmooOdoo.logs",
+        "title": "Open Logs",
+        "category": "WPMoo Odoo"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "wpmooOdoo.refresh",
+          "when": "view == wpmooOdoo.cockpit",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "tsc -p ./ --noEmit",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/vscode": "^1.100.0",
+    "@vscode/vsce": "^3.3.2",
+    "typescript": "^5.8.0"
+  }
+}
