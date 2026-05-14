@@ -161,18 +161,17 @@ export const environmentSection: SectionDefinition = {
     {
       id: "create-preview",
       title: "Create command preview",
-      description: "The command updates locally as form values change. It is not executed by this phase.",
+      description: "The command updates locally as form values change and can be opened in the VS Code terminal.",
       commandPreview: {
         id: "environment-create",
         dynamic: "environmentCreate",
         argv: buildCreateCommandArgv(defaultEnvironmentValues),
-        description: "Copying is allowed; running the command from VS Code will be wired in a later phase."
+        description: "Copy the command or run it in the VS Code terminal."
       },
       action: {
-        label: "Create environment",
-        disabled: true
+        label: "Create environment"
       },
-      badges: ["Preview only"]
+      badges: ["Terminal"]
     }
   ]
 };

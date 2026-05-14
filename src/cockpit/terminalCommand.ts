@@ -59,3 +59,13 @@ export function buildTerminalCommand(argv: readonly string[]): string {
 export function getCockpitTerminalCommand(id: string): CockpitTerminalCommand | undefined {
   return cockpitTerminalCommandsById.get(id);
 }
+
+export function isAllowedTerminalCommandText(command: string): boolean {
+  const trimmedCommand = command.trim();
+
+  if (!trimmedCommand || /[\r\n]/.test(trimmedCommand)) {
+    return false;
+  }
+
+  return /^npx\s+@wpmoo\/odoo(?:\s|$)/.test(trimmedCommand);
+}

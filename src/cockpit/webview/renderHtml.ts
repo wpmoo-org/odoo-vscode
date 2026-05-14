@@ -265,7 +265,7 @@ function renderCommandPreview(
           <button class="command-icon-button command-copy-button" type="button" aria-label="Copy command" title="Copy command"${copyAttribute}>
             ${renderCodicon("copy")}
           </button>
-          ${action ? renderInlineRowAction(action) : ""}
+          ${action ? renderInlineRowAction(action, preview, command) : ""}
         </div>
       </div>
     </div>
@@ -273,11 +273,20 @@ function renderCommandPreview(
   </div>`;
 }
 
-function renderInlineRowAction(action: NonNullable<SettingsRowDefinition["action"]>): string {
+function renderInlineRowAction(
+  action: NonNullable<SettingsRowDefinition["action"]>,
+  preview: CommandPreview,
+  command: string
+): string {
   const disabledAttribute = action.disabled ? ` disabled aria-disabled="true"` : "";
+  const runAttribute = action.disabled
+    ? ""
+    : preview.id
+      ? ` data-run-preview-command="${escapeAttribute(preview.id)}"`
+      : ` data-run-inline-command="${escapeAttribute(command)}"`;
   const label = escapeAttribute(action.label);
 
-  return `<button class="command-icon-button command-run-button" type="button" aria-label="${label}" title="${label}"${disabledAttribute}>
+  return `<button class="command-icon-button command-run-button" type="button" aria-label="${label}" title="${label}"${disabledAttribute}${runAttribute}>
     ${renderCodicon("debug-start")}
   </button>`;
 }

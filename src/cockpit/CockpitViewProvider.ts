@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-import { runCockpitTerminalCommand } from "./terminalRunner.js";
+import { runCockpitTerminalCommand, runTerminalCommandText } from "./terminalRunner.js";
 import { detectWorkspaceSignals, workspaceMarkers } from "./workspaceDetection.js";
 import { renderCockpitHtml } from "./webview/renderHtml";
 import { cockpitSections } from "./webview/sections/index.js";
@@ -9,6 +9,11 @@ import type { EnvironmentGate } from "./webview/types.js";
 interface RunCommandMessage {
   readonly type: "runCommand";
   readonly commandId: string;
+}
+
+interface RunCommandPreviewMessage {
+  readonly type: "runCommandPreview";
+  readonly command: string;
 }
 
 export class CockpitViewProvider implements vscode.WebviewViewProvider {
@@ -22,7 +27,8 @@ export class CockpitViewProvider implements vscode.WebviewViewProvider {
 
   public constructor(
     private readonly extensionUri: vscode.Uri,
-    private readonly runCommand: (commandId: string) => Promise<void> = runCockpitTerminalCommand
+    private readonly runCommand: (commandId: string) => Promise<void> = runCockpitTerminalCommand,
+    private readonly runCommandPreview: (commandText: string) => Promise<void> = runTerminalCommandText
   ) {}
 
   public resolveWebviewView(webviewView: vscode.WebviewView): void {
@@ -36,6 +42,11 @@ export class CockpitViewProvider implements vscode.WebviewViewProvider {
     this.messageSubscription = webviewView.webview.onDidReceiveMessage((message: unknown) => {
       if (isRunCommandMessage(message)) {
         void this.runCommand(message.commandId);
+        return;
+      }
+
+      if (isRunCommandPreviewMessage(message)) {
+        void this.runCommandPreview(message.command);
       }
     });
 
@@ -98,6 +109,17 @@ function isRunCommandMessage(message: unknown): message is RunCommandMessage {
     "commandId" in message &&
     message.type === "runCommand" &&
     typeof message.commandId === "string"
+  );
+}
+
+function isRunCommandPreviewMessage(message: unknown): message is RunCommandPreviewMessage {
+  return (
+    typeof message === "object" &&
+    message !== null &&
+    "type" in message &&
+    "command" in message &&
+    message.type === "runCommandPreview" &&
+    typeof message.command === "string"
   );
 }
 

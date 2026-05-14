@@ -103,3 +103,25 @@ test("renders row command previews with inline copy and action controls", () => 
   assert.doesNotMatch(html, /<vscode-icon class="command-run-button"/);
   assert.doesNotMatch(html, /<button class="command-copy-button"/);
 });
+
+test("renders environment create command preview with an active run action", () => {
+  const html = renderCockpitHtml({
+    codiconsCssUri: fakeUri,
+    componentScriptUri: fakeUri,
+    environmentGate: {
+      ready: false,
+      statusLabel: "Status: Unavailable",
+      message: "No WPMoo environment is detected in this workspace.",
+      setupSectionId: "environment-setup"
+    },
+    nonce: "test-nonce",
+    sections: cockpitSections,
+    webview: fakeWebview
+  });
+
+  assert.match(html, /data-command-output="environment-create"/);
+  assert.match(html, /data-run-preview-command="environment-create"/);
+  assert.match(html, /aria-label="Create environment"/);
+  assert.doesNotMatch(html, /aria-label="Create environment"[^>]*disabled/);
+  assert.doesNotMatch(html, /running the command from VS Code will be wired in a later phase/);
+});

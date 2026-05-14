@@ -114,4 +114,8 @@ export type WebviewMessage =
   | {
       readonly type: "runCommand";
       readonly commandId: string;
+    }
+  | {
+      readonly type: "runCommandPreview";
+      readonly command: string;
     };

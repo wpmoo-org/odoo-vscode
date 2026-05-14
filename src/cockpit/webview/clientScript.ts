@@ -236,11 +236,29 @@ for (const copyButton of document.querySelectorAll("[data-copy-command], [data-c
   });
 }
 
-for (const runButton of document.querySelectorAll("[data-run-command]")) {
+for (const runButton of document.querySelectorAll("[data-run-command], [data-run-preview-command], [data-run-inline-command]")) {
   triggerClickFromKeyboard(runButton);
 
   runButton.addEventListener("click", () => {
     const commandId = runButton.dataset.runCommand;
+    const previewCommandId = runButton.dataset.runPreviewCommand;
+    const inlineCommand = runButton.dataset.runInlineCommand;
+
+    if (previewCommandId) {
+      const output = document.querySelector('[data-command-output="' + previewCommandId + '"]');
+      const command = output?.dataset.commandValue ?? output?.value ?? output?.textContent ?? "";
+
+      if (command) {
+        vscodeApi?.postMessage({ type: "runCommandPreview", command });
+      }
+
+      return;
+    }
+
+    if (inlineCommand) {
+      vscodeApi?.postMessage({ type: "runCommandPreview", command: inlineCommand });
+      return;
+    }
 
     if (!commandId) {
       return;
