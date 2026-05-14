@@ -1,12 +1,20 @@
 export const cockpitClientScript = `
 const tabs = Array.from(document.querySelectorAll('[role="tab"][data-section-id]'));
 const panels = Array.from(document.querySelectorAll('[role="tabpanel"][data-section-id]'));
+const mainHeading = document.querySelector(".main-heading");
 
 function selectSection(sectionId, options = {}) {
   for (const tab of tabs) {
     const isSelected = tab.dataset.sectionId === sectionId;
     tab.setAttribute("aria-selected", String(isSelected));
     tab.setAttribute("tabindex", isSelected ? "0" : "-1");
+
+    if (isSelected && mainHeading) {
+      const label = tab.querySelector(".section-tab-label")?.textContent?.trim();
+      if (label) {
+        mainHeading.textContent = label;
+      }
+    }
 
     if (isSelected && options.focus) {
       tab.focus();

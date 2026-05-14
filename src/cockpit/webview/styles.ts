@@ -156,6 +156,156 @@ button {
   border-top: 1px solid var(--vscode-panel-border);
 }
 
+.cockpit-dashboard {
+  display: grid;
+  max-width: 820px;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.cockpit-control-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 0 10px;
+  border-top: 1px solid var(--vscode-panel-border);
+  border-bottom: 1px solid var(--vscode-panel-border);
+}
+
+.cockpit-status {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+}
+
+.cockpit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.compact-action {
+  min-width: 0;
+}
+
+.dashboard-block {
+  display: grid;
+  gap: 7px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+}
+
+.dashboard-block-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dashboard-block-heading h3 {
+  margin: 0;
+  color: var(--vscode-foreground);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.service-list {
+  display: grid;
+  gap: 1px;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.service-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 8px;
+  background: var(--vscode-sideBar-background);
+}
+
+.service-row + .service-row {
+  border-top: 1px solid var(--vscode-panel-border);
+}
+
+.service-main {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.service-name {
+  overflow: hidden;
+  color: var(--vscode-foreground);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.service-detail {
+  overflow: hidden;
+  color: var(--vscode-descriptionForeground);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 18px;
+  padding: 0 7px;
+  color: var(--vscode-badge-foreground);
+  background: var(--vscode-badge-background);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.status-pill.is-running {
+  color: var(--vscode-editor-background);
+  background: var(--vscode-charts-green);
+}
+
+.status-pill.is-stopped,
+.status-pill.is-unknown {
+  color: var(--vscode-badge-foreground);
+  background: var(--vscode-badge-background);
+}
+
+.status-pill.is-warning {
+  color: var(--vscode-editor-background);
+  background: var(--vscode-charts-yellow);
+}
+
+.command-preview.is-compact {
+  max-height: 84px;
+}
+
+.log-preview {
+  max-height: 132px;
+  margin: 0;
+  padding: 7px 8px;
+  overflow: auto;
+  color: var(--vscode-terminal-foreground);
+  background: var(--vscode-terminal-background);
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: var(--vscode-editor-font-family);
+  font-size: var(--vscode-editor-font-size);
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
 .settings-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -296,6 +446,22 @@ button {
 @media (max-width: 560px) {
   .content {
     padding: 12px 12px 20px;
+  }
+
+  .cockpit-control-bar,
+  .dashboard-block-heading,
+  .service-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .cockpit-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .service-main {
+    justify-content: space-between;
   }
 
   .command-preview-toolbar,

@@ -3,7 +3,15 @@ import type * as vscode from "vscode";
 import { cockpitClientScript } from "./clientScript";
 import { buildCommandPreview } from "./commandPreview.js";
 import { cockpitStyles } from "./styles";
-import type { CommandPreview, ControlDefinition, SectionDefinition, SettingsRowDefinition } from "./types";
+import type {
+  CockpitDashboardAction,
+  CockpitDashboardDefinition,
+  CockpitDashboardService,
+  CommandPreview,
+  ControlDefinition,
+  SectionDefinition,
+  SettingsRowDefinition
+} from "./types";
 
 export interface RenderCockpitHtmlOptions {
   readonly codiconsCssUri: vscode.Uri;
@@ -14,7 +22,8 @@ export interface RenderCockpitHtmlOptions {
 }
 
 export function renderCockpitHtml(options: RenderCockpitHtmlOptions): string {
-  const firstSectionId = options.sections[0]?.id;
+  const firstSection = options.sections[0];
+  const firstSectionId = firstSection?.id;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -37,7 +46,7 @@ export function renderCockpitHtml(options: RenderCockpitHtmlOptions): string {
         ${options.sections.map((section) => renderSectionTab(section, section.id === firstSectionId)).join("")}
       </nav>
       <main class="content">
-        <h1 class="main-heading">Settings</h1>
+        <h1 class="main-heading">${firstSection ? escapeHtml(firstSection.title) : "Settings"}</h1>
         ${options.sections.map((section) => renderSectionPanel(section, section.id !== firstSectionId)).join("")}
       </main>
     </div>
@@ -59,20 +68,70 @@ function renderSectionTab(section: SectionDefinition, selected: boolean): string
 
 function renderSectionPanel(section: SectionDefinition, hidden: boolean): string {
   const sectionId = escapeAttribute(section.id);
+  const rows = section.rows.length
+    ? `<div class="settings-rows">${section.rows.map((row) => renderSettingsRow(sectionId, row)).join("")}</div>`
+    : "";
 
   return `<section class="section-panel" id="section-${sectionId}" role="tabpanel" data-section-id="${sectionId}" aria-labelledby="tab-${sectionId}"${hidden ? " hidden" : ""}>
     <div class="section-heading">
       <div class="section-heading-copy">
         ${renderCodicon(section.icon)}
-        <h2>${escapeHtml(section.title)}</h2>
+        <h2>${escapeHtml(section.heading ?? section.title)}</h2>
       </div>
       <vscode-badge>Preview shell</vscode-badge>
     </div>
     ${section.description ? `<p class="section-description">${escapeHtml(section.description)}</p>` : ""}
-    <div class="settings-rows">
-      ${section.rows.map((row) => renderSettingsRow(sectionId, row)).join("")}
-    </div>
+    ${section.dashboard ? renderCockpitDashboard(section.dashboard) : ""}
+    ${rows}
   </section>`;
+}
+
+function renderCockpitDashboard(dashboard: CockpitDashboardDefinition): string {
+  return `<div class="cockpit-dashboard">
+    <section class="cockpit-control-bar" aria-label="Service controls">
+      <div class="cockpit-status">
+        <span class="status-pill is-${escapeAttribute(dashboard.status.tone)}">${escapeHtml(dashboard.status.label)}</span>
+      </div>
+      <vscode-button-group class="cockpit-actions" aria-label="Service command previews">
+        ${dashboard.actions.map(renderDashboardAction).join("")}
+      </vscode-button-group>
+    </section>
+    <section class="dashboard-block" aria-label="Services">
+      <div class="dashboard-block-heading">
+        <h3>Services</h3>
+      </div>
+      <div class="service-list">
+        ${dashboard.services.map(renderDashboardService).join("")}
+      </div>
+    </section>
+    <section class="dashboard-block" aria-label="Last command">
+      <div class="dashboard-block-heading">
+        <h3>Last command</h3>
+        <vscode-button secondary data-copy-inline="${escapeAttribute(buildCommandPreview(dashboard.lastCommand.argv))}">Copy command</vscode-button>
+      </div>
+      <code class="command-preview is-compact">${escapeHtml(buildCommandPreview(dashboard.lastCommand.argv))}</code>
+    </section>
+    <section class="dashboard-block" aria-label="Recent logs">
+      <div class="dashboard-block-heading">
+        <h3>Recent logs</h3>
+      </div>
+      <pre class="log-preview">${dashboard.recentLogs.map(escapeHtml).join("\n")}</pre>
+    </section>
+  </div>`;
+}
+
+function renderDashboardAction(action: CockpitDashboardAction): string {
+  return `<vscode-button class="compact-action${action.primary ? " is-primary" : ""}"${action.primary ? "" : " secondary"} title="${escapeAttribute(buildCommandPreview(action.commandPreview.argv))}">${escapeHtml(action.label)}</vscode-button>`;
+}
+
+function renderDashboardService(service: CockpitDashboardService): string {
+  return `<div class="service-row">
+    <div class="service-main">
+      <span class="service-name">${escapeHtml(service.name)}</span>
+      <span class="status-pill is-${escapeAttribute(service.tone)}">${escapeHtml(service.status)}</span>
+    </div>
+    <span class="service-detail">${escapeHtml(service.detail)}</span>
+  </div>`;
 }
 
 function renderSettingsRow(sectionId: string, row: SettingsRowDefinition): string {

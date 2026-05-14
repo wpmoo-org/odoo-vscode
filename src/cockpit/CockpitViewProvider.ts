@@ -1,18 +1,7 @@
 import * as vscode from "vscode";
 
 import { renderCockpitHtml } from "./webview/renderHtml";
-import { cockpitSection } from "./webview/sections/cockpit.js";
-import { environmentSection } from "./webview/sections/environment.js";
-import { maintenanceSection } from "./webview/sections/maintenance.js";
-import { sourceRepositoriesSection } from "./webview/sections/sourceRepositories.js";
-import type { SectionDefinition } from "./webview/types";
-
-export const cockpitSections: readonly SectionDefinition[] = [
-  environmentSection,
-  cockpitSection,
-  sourceRepositoriesSection,
-  maintenanceSection
-];
+import { cockpitSections } from "./webview/sections/index.js";
 
 export class CockpitViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "wpmooOdoo.cockpit";

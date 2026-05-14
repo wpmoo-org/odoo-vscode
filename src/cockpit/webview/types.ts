@@ -5,6 +5,32 @@ export interface CommandPreview {
   readonly dynamic?: "environmentCreate";
 }
 
+export interface CockpitDashboardAction {
+  readonly id: string;
+  readonly label: string;
+  readonly commandPreview: CommandPreview;
+  readonly icon?: string;
+  readonly primary?: boolean;
+}
+
+export interface CockpitDashboardService {
+  readonly name: string;
+  readonly status: string;
+  readonly detail: string;
+  readonly tone: "running" | "stopped" | "warning" | "unknown";
+}
+
+export interface CockpitDashboardDefinition {
+  readonly status: {
+    readonly label: string;
+    readonly tone: "running" | "stopped" | "warning" | "unknown";
+  };
+  readonly actions: readonly CockpitDashboardAction[];
+  readonly services: readonly CockpitDashboardService[];
+  readonly lastCommand: CommandPreview;
+  readonly recentLogs: readonly string[];
+}
+
 export type ControlDefinition =
   | {
       readonly type: "textfield";
@@ -67,7 +93,9 @@ export interface SectionDefinition {
   readonly id: string;
   readonly title: string;
   readonly icon: string;
+  readonly heading?: string;
   readonly description?: string;
+  readonly dashboard?: CockpitDashboardDefinition;
   readonly rows: readonly SettingsRowDefinition[];
 }
 
