@@ -12,12 +12,19 @@ and recovery commands.
 This repository starts with the service cockpit extension shell:
 
 - Activity Bar entry for WPMoo Odoo.
-- Cockpit webview with quick action buttons.
+- Cockpit webview built with `@vscode-elements/elements` web components.
 - Placeholder commands for `status`, `doctor`, `start`, `stop`, `restart`, and
   `logs`.
 
 Command execution, workspace detection, and richer status rendering will be added
 after the scaffold is stable.
+
+## Webview UI
+
+The extension uses `@vscode-elements/elements` for native-looking VS Code
+webview controls. Microsoft archived the original
+`@vscode/webview-ui-toolkit`, so this project uses a maintained web component
+library instead of hand-rolling controls.
 
 ## Development
 

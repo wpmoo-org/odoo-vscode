@@ -103,14 +103,16 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "copy:webview": "node scripts/copy-webview-assets.mjs",
+    "compile": "npm run copy:webview && tsc -p ./",
+    "watch": "npm run copy:webview && tsc -watch -p ./",
     "lint": "tsc -p ./ --noEmit",
     "package": "vsce package"
   },
   "devDependencies": {
     "@types/node": "^20.17.0",
     "@types/vscode": "^1.100.0",
+    "@vscode-elements/elements": "^2.5.1",
     "@vscode/vsce": "^3.3.2",
     "typescript": "^5.8.0"
   }

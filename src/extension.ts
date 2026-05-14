@@ -49,7 +49,7 @@ const cockpitCommands: readonly CockpitCommand[] = [
 ];
 
 export function activate(context: vscode.ExtensionContext): void {
-  const provider = new CockpitViewProvider();
+  const provider = new CockpitViewProvider(context.extensionUri);
 
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(CockpitViewProvider.viewType, provider),
@@ -79,10 +79,15 @@ class CockpitViewProvider implements vscode.WebviewViewProvider {
 
   private view?: vscode.WebviewView;
 
+  public constructor(private readonly extensionUri: vscode.Uri) {}
+
   public resolveWebviewView(webviewView: vscode.WebviewView): void {
     this.view = webviewView;
     webviewView.webview.options = {
-      enableScripts: true
+      enableScripts: true,
+      localResourceRoots: [
+        vscode.Uri.joinPath(this.extensionUri, "media")
+      ]
     };
 
     webviewView.webview.html = this.render(webviewView.webview);
@@ -110,13 +115,16 @@ class CockpitViewProvider implements vscode.WebviewViewProvider {
 
   private render(webview: vscode.Webview): string {
     const nonce = getNonce();
+    const componentScriptUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this.extensionUri, "media", "vscode-elements.js")
+    );
     const buttons = cockpitCommands
       .map(
         (command) => `
-          <button class="action" data-action="${command.action}">
+          <vscode-button block secondary class="action" data-action="${command.action}">
             <span class="action-title">${escapeHtml(command.title)}</span>
             <span class="action-description">${escapeHtml(command.description)}</span>
-          </button>
+          </vscode-button>
         `
       )
       .join("");
@@ -125,9 +133,10 @@ class CockpitViewProvider implements vscode.WebviewViewProvider {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src ${webview.cspSource} 'nonce-${nonce}';">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WPMoo Odoo</title>
+  <script type="module" nonce="${nonce}" src="${componentScriptUri}"></script>
   <style>
     :root {
       color-scheme: light dark;
@@ -140,6 +149,13 @@ class CockpitViewProvider implements vscode.WebviewViewProvider {
       background: var(--vscode-sideBar-background);
       font-family: var(--vscode-font-family);
       font-size: var(--vscode-font-size);
+    }
+
+    .header {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
     }
 
     h1 {
@@ -157,22 +173,11 @@ class CockpitViewProvider implements vscode.WebviewViewProvider {
     .actions {
       display: grid;
       gap: 8px;
+      margin-top: 16px;
     }
 
     .action {
-      width: 100%;
       min-height: 64px;
-      padding: 10px 12px;
-      border: 1px solid var(--vscode-button-border, transparent);
-      border-radius: 6px;
-      color: var(--vscode-button-foreground);
-      background: var(--vscode-button-background);
-      text-align: left;
-      cursor: pointer;
-    }
-
-    .action:hover {
-      background: var(--vscode-button-hoverBackground);
     }
 
     .action-title {
@@ -183,15 +188,19 @@ class CockpitViewProvider implements vscode.WebviewViewProvider {
 
     .action-description {
       display: block;
-      color: var(--vscode-button-secondaryForeground, var(--vscode-button-foreground));
+      color: var(--vscode-descriptionForeground);
       font-size: 12px;
       line-height: 1.35;
     }
   </style>
 </head>
 <body>
-  <h1>WPMoo Odoo</h1>
+  <div class="header">
+    <h1>WPMoo Odoo</h1>
+    <vscode-badge>Scaffold</vscode-badge>
+  </div>
   <p>Service cockpit scaffold for existing WPMoo Odoo environments.</p>
+  <vscode-divider></vscode-divider>
   <div class="actions">
     ${buttons}
   </div>
