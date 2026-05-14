@@ -260,10 +260,9 @@ function renderCommandPreview(
     <div class="command-preview-label">Command preview</div>
     <div class="command-line">
       <div class="command-field">
-        <code class="command-preview"${idAttribute} data-command-value="${escapeAttribute(command)}">${escapeHtml(command)}</code>
-        <button class="command-copy-button" type="button" aria-label="Copy command" title="Copy command"${copyAttribute}>
-          ${renderCodicon("copy")}
-        </button>
+        <vscode-textfield class="command-preview" value="${escapeAttribute(command)}" readonly${idAttribute} data-command-value="${escapeAttribute(command)}">
+          <vscode-icon class="command-copy-button" slot="content-after" action-icon name="copy" label="Copy command"${copyAttribute}></vscode-icon>
+        </vscode-textfield>
       </div>
       ${action ? renderInlineRowAction(action) : ""}
     </div>

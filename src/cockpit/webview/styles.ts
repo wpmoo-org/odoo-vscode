@@ -449,59 +449,19 @@ button {
 }
 
 .command-field {
-  position: relative;
+  display: flex;
   min-width: 0;
   flex: 1 1 auto;
 }
 
 .command-preview {
-  display: block;
-  max-height: 180px;
-  min-height: 32px;
-  padding: 7px 42px 7px 8px;
-  overflow: auto;
-  overflow-wrap: anywhere;
-  color: var(--vscode-textPreformat-foreground);
-  background: var(--vscode-textCodeBlock-background);
-  border: 1px solid var(--vscode-panel-border);
-  border-radius: 4px;
-  box-sizing: border-box;
+  width: 100%;
   font-family: var(--vscode-editor-font-family);
   font-size: var(--vscode-editor-font-size);
-  line-height: 1.45;
-  white-space: pre-wrap;
 }
 
 .command-copy-button {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  padding: 0;
   color: var(--vscode-icon-foreground);
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-
-.command-copy-button:hover {
-  background: var(--vscode-toolbar-hoverBackground);
-  border-color: var(--vscode-commandCenter-inactiveBorder);
-}
-
-.command-copy-button:focus-visible {
-  outline: 1px solid var(--vscode-focusBorder);
-  outline-offset: -1px;
-}
-
-.command-copy-button .codicon {
-  font-size: 15px;
 }
 
 .command-preview-card.is-disabled .command-preview {

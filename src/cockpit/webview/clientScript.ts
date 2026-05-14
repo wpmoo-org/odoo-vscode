@@ -163,6 +163,10 @@ function setCommandPreview(previewId, command) {
 
   output.textContent = command;
   output.dataset.commandValue = command;
+
+  if ("value" in output) {
+    output.value = command;
+  }
 }
 
 function syncEnvironmentCreatePreview() {
@@ -190,8 +194,10 @@ for (const copyButton of document.querySelectorAll("[data-copy-command], [data-c
     const previousText = copyButton.textContent;
     const previousLabel = copyButton.getAttribute("aria-label");
     const previousTitle = copyButton.getAttribute("title");
+    const previousIconLabel = copyButton.getAttribute("label");
     copyButton.setAttribute("aria-label", "Copied");
     copyButton.setAttribute("title", "Copied");
+    copyButton.setAttribute("label", "Copied");
 
     if (previousText.trim()) {
       copyButton.textContent = "Copied";
@@ -208,6 +214,10 @@ for (const copyButton of document.querySelectorAll("[data-copy-command], [data-c
 
       if (previousTitle) {
         copyButton.setAttribute("title", previousTitle);
+      }
+
+      if (previousIconLabel) {
+        copyButton.setAttribute("label", previousIconLabel);
       }
     }, 1200);
   });

@@ -85,8 +85,9 @@ test("renders row command previews with inline copy and action controls", () => 
   });
 
   assert.match(html, /class="command-line"/);
-  assert.match(html, /class="command-copy-button"[^>]*aria-label="Copy command"/);
-  assert.match(html, /class="codicon codicon-copy"/);
+  assert.match(html, /<vscode-textfield class="command-preview"[^>]*readonly/);
+  assert.match(html, /<vscode-icon class="command-copy-button"[^>]*slot="content-after"[^>]*action-icon/);
+  assert.match(html, /name="copy"/);
   assert.match(html, /class="command-run-button"[^>]*disabled[^>]*>Run status<\/vscode-button>/);
-  assert.doesNotMatch(html, /<vscode-button secondary[^>]*>Copy command<\/vscode-button>/);
+  assert.doesNotMatch(html, /<button class="command-copy-button"/);
 });
