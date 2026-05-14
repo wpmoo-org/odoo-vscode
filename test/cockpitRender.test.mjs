@@ -85,10 +85,15 @@ test("renders row command previews with inline copy and action controls", () => 
   });
 
   assert.match(html, /class="command-line"/);
-  assert.match(html, /<vscode-textfield class="command-preview"[^>]*readonly/);
-  assert.match(html, /<span class="[^"]*codicon-copy[^"]*command-icon-button[^"]*command-copy-button[^"]*"[^>]*slot="content-after"[^>]*role="button"[^>]*aria-label="Copy command"/);
-  assert.match(html, /<span class="[^"]*codicon-debug-start[^"]*command-icon-button[^"]*command-run-button[^"]*"[^>]*slot="content-after"[^>]*role="button"[^>]*aria-label="Run status"/);
-  assert.match(html, /class="[^"]*command-run-button[^"]*"[^>]*aria-disabled="true"/);
+  assert.match(html, /id="vscode-codicon-stylesheet"/);
+  assert.match(html, /<input class="command-preview"[^>]*readonly/);
+  assert.match(html, /<div class="command-actions"[^>]*aria-label="Command actions"/);
+  assert.match(html, /<button class="command-icon-button command-copy-button"[^>]*type="button"[^>]*aria-label="Copy command"[^>]*>\s*<span class="codicon codicon-copy"/);
+  assert.match(html, /<button class="command-icon-button command-run-button"[^>]*type="button"[^>]*aria-label="Run status"[^>]*disabled[^>]*>\s*<span class="codicon codicon-debug-start"/);
+  assert.match(html, /class="command-icon-button command-run-button"[^>]*aria-disabled="true"/);
+  assert.doesNotMatch(html, /class="command-copy-button"[^>]*slot="content-after"/);
+  assert.doesNotMatch(html, /class="command-run-button"[^>]*slot="content-after"/);
+  assert.doesNotMatch(html, /<vscode-textfield class="command-preview"/);
   assert.doesNotMatch(html, />Run status<\/vscode-button>/);
   assert.doesNotMatch(html, /class="command-copy-button"[^>]*icon="copy"/);
   assert.doesNotMatch(html, /class="command-run-button"[^>]*icon="debug-start"/);

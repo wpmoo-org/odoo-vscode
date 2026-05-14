@@ -452,24 +452,65 @@ button {
   display: flex;
   min-width: 0;
   flex: 1 1 auto;
+  position: relative;
 }
 
 .command-preview {
   width: 100%;
+  height: 26px;
+  min-width: 0;
+  padding: 3px 32px 3px 6px;
+  color: var(--vscode-settings-textInputForeground, var(--vscode-input-foreground, var(--vscode-foreground)));
+  background: var(--vscode-settings-textInputBackground, var(--vscode-input-background, transparent));
+  border: 1px solid var(--vscode-settings-textInputBorder, var(--vscode-input-border, transparent));
+  border-radius: 4px;
+  box-sizing: border-box;
   font-family: var(--vscode-editor-font-family);
   font-size: var(--vscode-editor-font-size);
+  line-height: 18px;
+}
+
+.command-field.has-run-action .command-preview {
+  padding-right: 56px;
+}
+
+.command-preview:focus {
+  border-color: var(--vscode-focusBorder);
+  outline: none;
+}
+
+.command-preview[readonly] {
+  cursor: text;
+}
+
+.command-actions {
+  position: absolute;
+  top: 50%;
+  right: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  transform: translateY(-50%);
 }
 
 .command-icon-button {
+  appearance: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 22px;
   height: 22px;
-  color: var(--vscode-icon-foreground);
+  padding: 0;
+  color: var(--vscode-icon-foreground, var(--vscode-foreground));
+  background: transparent;
+  border: 1px solid transparent;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.command-icon-button .codicon {
   font-size: 15px;
+  pointer-events: none;
 }
 
 .command-icon-button:hover {
@@ -485,7 +526,7 @@ button {
   color: var(--vscode-disabledForeground);
 }
 
-.command-run-button[aria-disabled="true"],
+.command-icon-button[disabled],
 .command-preview-card.is-disabled .command-run-button {
   opacity: 0.5;
   pointer-events: none;

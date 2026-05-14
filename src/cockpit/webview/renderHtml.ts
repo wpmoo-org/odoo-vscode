@@ -42,7 +42,7 @@ export function renderCockpitHtml(options: RenderCockpitHtmlOptions): string {
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${options.webview.cspSource}; font-src ${options.webview.cspSource}; style-src ${options.webview.cspSource} 'unsafe-inline'; script-src ${options.webview.cspSource} 'nonce-${options.nonce}';">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WPMoo: Odoo Settings</title>
-  <link rel="stylesheet" href="${options.codiconsCssUri.toString()}">
+  <link id="vscode-codicon-stylesheet" rel="stylesheet" nonce="${options.nonce}" href="${options.codiconsCssUri.toString()}">
   <script type="module" nonce="${options.nonce}" src="${options.componentScriptUri.toString()}"></script>
   <style>${cockpitStyles}</style>
 </head>
@@ -259,11 +259,14 @@ function renderCommandPreview(
   return `<div class="command-preview-card${disabled ? " is-disabled" : ""}"${dynamicAttribute}>
     <div class="command-preview-label">Command preview</div>
     <div class="command-line">
-      <div class="command-field">
-        <vscode-textfield class="command-preview" value="${escapeAttribute(command)}" readonly${idAttribute} data-command-value="${escapeAttribute(command)}">
-          <span class="codicon codicon-copy command-icon-button command-copy-button" slot="content-after" role="button" tabindex="0" aria-label="Copy command" title="Copy command"${copyAttribute}></span>
+      <div class="command-field${action ? " has-run-action" : ""}">
+        <input class="command-preview" type="text" value="${escapeAttribute(command)}" readonly aria-label="Command preview"${idAttribute} data-command-value="${escapeAttribute(command)}">
+        <div class="command-actions" aria-label="Command actions">
+          <button class="command-icon-button command-copy-button" type="button" aria-label="Copy command" title="Copy command"${copyAttribute}>
+            ${renderCodicon("copy")}
+          </button>
           ${action ? renderInlineRowAction(action) : ""}
-        </vscode-textfield>
+        </div>
       </div>
     </div>
     ${preview.description ? `<p class="preview-description">${escapeHtml(preview.description)}</p>` : ""}
@@ -271,10 +274,12 @@ function renderCommandPreview(
 }
 
 function renderInlineRowAction(action: NonNullable<SettingsRowDefinition["action"]>): string {
-  const disabledAttribute = action.disabled ? ` aria-disabled="true"` : ` tabindex="0"`;
+  const disabledAttribute = action.disabled ? ` disabled aria-disabled="true"` : "";
   const label = escapeAttribute(action.label);
 
-  return `<span class="codicon codicon-debug-start command-icon-button command-run-button" slot="content-after" role="button" aria-label="${label}" title="${label}"${disabledAttribute}></span>`;
+  return `<button class="command-icon-button command-run-button" type="button" aria-label="${label}" title="${label}"${disabledAttribute}>
+    ${renderCodicon("debug-start")}
+  </button>`;
 }
 
 function renderRowAction(action: NonNullable<SettingsRowDefinition["action"]>): string {
