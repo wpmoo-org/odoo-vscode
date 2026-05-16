@@ -1,7 +1,7 @@
 {
   "name": "wpmoo-odoo-vscode",
-  "displayName": "WPMoo Odoo",
-  "description": "VS Code service cockpit for WPMoo Odoo environments.",
+  "displayName": "WPMoo Tool",
+  "description": "VS Code service cockpit for WPMoo Tool environments and Odoo development workflows.",
   "version": "0.0.1",
   "publisher": "wpmoo-org",
   "license": "MIT",
@@ -34,7 +34,7 @@
       "activitybar": [
         {
           "id": "wpmooOdoo",
-          "title": "WPMoo Odoo",
+          "title": "WPMoo Tool",
           "icon": "resources/wpmoo.svg"
         }
       ]
@@ -52,43 +52,43 @@
       {
         "command": "wpmooOdoo.openCockpit",
         "title": "Open Cockpit",
-        "category": "WPMoo Odoo"
+        "category": "WPMoo Tool"
       },
       {
         "command": "wpmooOdoo.refresh",
         "title": "Refresh Cockpit",
-        "category": "WPMoo Odoo",
+        "category": "WPMoo Tool",
         "icon": "$(refresh)"
       },
       {
         "command": "wpmooOdoo.status",
         "title": "Status",
-        "category": "WPMoo Odoo"
+        "category": "WPMoo Tool"
       },
       {
         "command": "wpmooOdoo.doctor",
         "title": "Doctor",
-        "category": "WPMoo Odoo"
+        "category": "WPMoo Tool"
       },
       {
         "command": "wpmooOdoo.start",
         "title": "Start Services",
-        "category": "WPMoo Odoo"
+        "category": "WPMoo Tool"
       },
       {
         "command": "wpmooOdoo.stop",
         "title": "Stop Services",
-        "category": "WPMoo Odoo"
+        "category": "WPMoo Tool"
       },
       {
         "command": "wpmooOdoo.restart",
         "title": "Restart Services",
-        "category": "WPMoo Odoo"
+        "category": "WPMoo Tool"
       },
       {
         "command": "wpmooOdoo.logs",
         "title": "Open Logs",
-        "category": "WPMoo Odoo"
+        "category": "WPMoo Tool"
       }
     ],
     "menus": {

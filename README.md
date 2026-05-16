@@ -1,17 +1,20 @@
-# WPMoo Odoo for VS Code
+# WPMoo Tool for VS Code
 
-WPMoo Odoo is a VS Code service cockpit for existing
+WPMoo Tool is a VS Code service cockpit for existing
 [`@wpmoo/odoo`](https://www.npmjs.com/package/@wpmoo/odoo) environments.
 
-The extension is intended to provide a GUI wrapper around the daily WPMoo Odoo
-workflow: service control, logs, diagnostics, module actions, database snapshots,
-and recovery commands.
+The extension is intended to provide a GUI wrapper around the daily WPMoo Tool
+workflow for Odoo development: service control, logs, diagnostics, module
+actions, database snapshots, and recovery commands.
+
+WPMoo Tool is an independent project and is not affiliated with, endorsed by,
+or sponsored by Odoo S.A. Odoo is a trademark of Odoo S.A.
 
 ## MVP Scope
 
 This repository starts with the service cockpit extension shell:
 
-- Activity Bar entry for WPMoo Odoo.
+- Activity Bar entry for WPMoo Tool.
 - Cockpit webview built with `@vscode-elements/elements` web components.
 - Placeholder commands for `status`, `doctor`, `start`, `stop`, `restart`, and
   `logs`.

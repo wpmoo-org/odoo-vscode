@@ -14,7 +14,7 @@ const cockpitCommands: readonly CockpitCommand[] = [
     action: "status",
     command: "wpmooOdoo.status",
     title: "Status",
-    description: "Inspect the current WPMoo Odoo environment status."
+    description: "Inspect the current WPMoo Tool environment status."
   },
   {
     action: "doctor",
@@ -135,7 +135,7 @@ class CockpitViewProvider implements vscode.WebviewViewProvider {
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src ${webview.cspSource} 'nonce-${nonce}';">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WPMoo Odoo</title>
+  <title>WPMoo Tool</title>
   <script type="module" nonce="${nonce}" src="${componentScriptUri}"></script>
   <style>
     :root {
@@ -196,10 +196,10 @@ class CockpitViewProvider implements vscode.WebviewViewProvider {
 </head>
 <body>
   <div class="header">
-    <h1>WPMoo Odoo</h1>
+    <h1>WPMoo Tool</h1>
     <vscode-badge>Scaffold</vscode-badge>
   </div>
-  <p>Service cockpit scaffold for existing WPMoo Odoo environments.</p>
+  <p>VS Code service cockpit for WPMoo Tool environments and Odoo development workflows.</p>
   <vscode-divider></vscode-divider>
   <div class="actions">
     ${buttons}
