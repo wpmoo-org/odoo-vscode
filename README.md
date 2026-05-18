@@ -1,7 +1,7 @@
 # WPMoo Tool for VS Code
 
 WPMoo Tool is a VS Code service cockpit for existing
-[`@wpmoo/odoo`](https://www.npmjs.com/package/@wpmoo/odoo) environments.
+[`@wpmoo/toolkit`](https://www.npmjs.com/package/@wpmoo/toolkit) environments.
 
 The extension is intended to provide a GUI wrapper around the daily WPMoo Tool
 workflow for Odoo development: service control, logs, diagnostics, module
@@ -55,9 +55,9 @@ Package a local VSIX after `@vscode/vsce` is installed:
 npm run package
 ```
 
-## Relationship To `@wpmoo/odoo`
+## Relationship To `@wpmoo/toolkit`
 
 This extension lives in a separate repository from the CLI package. The first MVP
 will call the existing CLI commands through VS Code terminals. A later version can
-use structured JSON output or a public API from `@wpmoo/odoo` for richer GUI
+use structured JSON output or a public API from `@wpmoo/toolkit` for richer GUI
 state.
